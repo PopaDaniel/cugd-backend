@@ -9,7 +9,7 @@ let rimraf = require("rimraf");
 let browser = null;
 let page = null;
 let counter = { fails: 0, success: 0 };
-const tmpPath = path.resolve(__dirname, "../wbm/tmp");
+const tmpPath = path.resolve(__dirname, "../tmp");
 
 const SELECTORS = {
   LOADING: "progress",
