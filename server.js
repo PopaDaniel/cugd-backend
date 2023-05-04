@@ -8,7 +8,7 @@ const Employee = require("./controllers/employeeController");
 const multer = require("multer");
 const Manager = require("./controllers/managerController");
 const cors = require("cors");
-const wbm = require("wbm");
+const wbm = require("./wbm");
 
 dotenv.config({ path: "./config.env" });
 mongoose.set("strictQuery", true);
