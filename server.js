@@ -44,7 +44,7 @@ app.post("/send", async (req, res) => {
   console.log(phones, message);
   if (!phones || !message) res.status(400).send("Phone or Message is empty");
   wbm
-    .start({ showBrowser: false, qrCodeData: true, session: true })
+    .start({ showBrowser: false, qrCodeData: true, session: false })
     .then(async (qrCodeData) => {
       res.send(qrCodeData);
       await wbm.waitQRCode();

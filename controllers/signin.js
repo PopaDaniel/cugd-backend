@@ -1,7 +1,6 @@
 const User = require("./userController");
 const jwt = require("jsonwebtoken");
 const handleSignin = async (req, res, User) => {
-  console.log(req.body.user);
   // const { user, password } = req.body;
   // if (!user || !password) {
   //   return res.status(400).json("incorrect form submission");
