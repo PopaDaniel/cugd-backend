@@ -1,24 +1,16 @@
+const sleep = (waitTimeInMs) =>
+  new Promise((resolve) => setTimeout(resolve, waitTimeInMs));
 const puppeteer = require("puppeteer");
 const qrcode = require("qrcode-terminal");
 const { from, merge } = require("rxjs");
 const { take } = require("rxjs/operators");
 const path = require("path");
-const readline = require("readline");
-let rimraf = require("rimraf");
+var rimraf = require("rimraf");
 
 let browser = null;
 let page = null;
 let counter = { fails: 0, success: 0 };
 const tmpPath = path.resolve(__dirname, "../tmp");
-
-const SELECTORS = {
-  LOADING: "progress",
-  INSIDE_CHAT: "document.getElementsByClassName('two')[0]",
-  QRCODE_PAGE: "body > div > div > .landing-wrapper",
-  QRCODE_DATA: "div[data-ref]",
-  QRCODE_DATA_ATTR: "data-ref",
-  SEND_BUTTON: 'div:nth-child(2) > button > span[data-icon="send"]',
-};
 
 /**
  * Initialize browser, page and setup page desktop mode
@@ -35,10 +27,7 @@ async function start({
   const args = {
     headless: !showBrowser,
     userDataDir: tmpPath,
-    args: [
-      "--no-sandbox",
-      // "--blink-settings=imagesEnabled=false"]
-    ],
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   };
   try {
     browser = await puppeteer.launch(args);
@@ -85,7 +74,7 @@ function isAuthenticated() {
 function needsToScan() {
   return from(
     page
-      .waitForSelector(SELECTORS.QRCODE_PAGE, {
+      .waitForSelector("body > div > div > .landing-wrapper", {
         timeout: 0,
       })
       .then(() => false)
@@ -95,7 +84,7 @@ function needsToScan() {
 function isInsideChat() {
   return from(
     page
-      .waitForFunction(SELECTORS.INSIDE_CHAT, {
+      .waitForFunction(`document.getElementsByClassName('two')[0]`, {
         timeout: 0,
       })
       .then(() => true)
@@ -109,11 +98,11 @@ function deleteSession() {
  * return the data used to create the QR Code
  */
 async function getQRCodeData() {
-  await page.waitForSelector(SELECTORS.QRCODE_DATA, { timeout: 60000 });
-  const qrcodeData = await page.evaluate((SELECTORS) => {
-    let qrcodeDiv = document.querySelector(SELECTORS.QRCODE_DATA);
-    return qrcodeDiv.getAttribute(SELECTORS.QRCODE_DATA_ATTR);
-  }, SELECTORS);
+  await page.waitForSelector("div[data-ref]", { timeout: 60000 });
+  const qrcodeData = await page.evaluate(() => {
+    let qrcodeDiv = document.querySelector("div[data-ref]");
+    return qrcodeDiv.getAttribute("data-ref");
+  });
   return await qrcodeData;
 }
 
@@ -140,7 +129,7 @@ async function generateQRCode() {
 async function waitQRCode() {
   // if user scan QR Code it will be hidden
   try {
-    await page.waitForSelector(SELECTORS.QRCODE_PAGE, {
+    await page.waitForSelector("div[data-ref]", {
       timeout: 30000,
       hidden: true,
     });
@@ -176,23 +165,20 @@ async function sendTo(phoneOrContact, message) {
         message
       )}`
     );
-    await page.waitForSelector(SELECTORS.LOADING, {
+    await page.waitForSelector("div#startup", { hidden: true, timeout: 60000 });
+    await sleep(1000);
+    await page.waitForSelector(".selectable-text", { timeout: 30000 });
+    await sleep(1000);
+    await page.click('span[data-icon="send"]', {
       hidden: true,
-      timeout: 60000,
+      timeout: 30000,
     });
-    await page.waitForSelector(SELECTORS.SEND_BUTTON, { timeout: 5000 });
-    await page.keyboard.press("Enter");
-    await page.waitFor(1000);
-    // process.stdout.clearLine();
-    // process.stdout.cursorTo(0);
-    readline.cursorTo(process.stdout, 0);
-    process.stdout.write(`${phone} Sent\n`);
+    await sleep(1000);
+    console.log(`${phone} Sent\n`);
     counter.success++;
   } catch (err) {
-    // process.stdout.clearLine();
-    // process.stdout.cursorTo(0);
-    readline.cursorTo(process.stdout, 0);
-    process.stdout.write(`${phone} Failed\n`);
+    console.error(err);
+    console.log(`${phone} Failed\n`);
     counter.fails++;
   }
 }
