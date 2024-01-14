@@ -8,7 +8,21 @@ const Employee = require("./controllers/employeeController");
 const multer = require("multer");
 const Manager = require("./controllers/managerController");
 const cors = require("cors");
-const wbm = require("./wbm");
+const { Client } = require("whatsapp-web.js");
+
+let qr;
+let isUserLogged = false;
+const client = new Client();
+client.on("qr", (qrCode) => {
+  qr = qrCode;
+  console.log("QR RECEIVED", qrCode);
+});
+
+client.on("ready", () => {
+  isUserLogged = true;
+  console.log("Client is ready!");
+});
+client.initialize();
 
 dotenv.config({ path: "./config.env" });
 mongoose.set("strictQuery", true);
@@ -37,21 +51,35 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
 app.post("/send", async (req, res) => {
-  const phones = [...req.body.phones];
-  const message = req.body.message;
-  console.log(phones, message);
-  if (!phones || !message) res.status(400).send("Phone or Message is empty");
-  wbm
-    .start({ showBrowser: false, qrCodeData: true, session: false })
-    .then(async (qrCodeData) => {
-      res.send(qrCodeData);
-      await wbm.waitQRCode();
-      await wbm.send(phones, message);
-      await wbm.end();
-    })
-    .catch((err) => console.log(err));
+  try {
+    const numbers = req.body.phones;
+    const message = req.body.message;
+    for (let i = 0; i < numbers.length; i++) {
+      client
+        .sendMessage(numbers[i], message)
+        .then((message) => {
+          //console.log("Message sent successfully:", message);
+        })
+        .catch((error) => {
+          console.error("Error sending message:", error);
+        });
+    }
+  } catch (error) {
+    console.error("Error getting contacts:", error);
+  }
+});
+
+app.get("/qrcode", async (req, res) => {
+  try {
+    if (isUserLogged) {
+      await client.logout();
+    }
+    res.send(qr);
+  } catch (error) {
+    console.error("Error handling /qrcode request", error);
+    res.status(500).send("Error handling /qrcode request");
+  }
 });
 
 app.get("/", async (req, res) => {
