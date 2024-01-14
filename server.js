@@ -5,6 +5,7 @@ const addEmployee = require("./controllers/addNewEmployee");
 const dotenv = require("dotenv");
 const User = require("./controllers/userController");
 const Employee = require("./controllers/employeeController");
+const path = require("path");
 const multer = require("multer");
 const Manager = require("./controllers/managerController");
 const cors = require("cors");
