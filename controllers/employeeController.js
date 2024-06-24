@@ -13,11 +13,12 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     default: "empty",
   },
-  img: {
-    data: Buffer,
-    contentType: String,
-  },
-
+  files: [
+    {
+      data: Buffer,
+      contentType: String,
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
