@@ -61,6 +61,7 @@ app.get("/connect", (req, res) => {
   } else if (app.locals.qrCode) {
     res.json({ qr: app.locals.qrCode });
   } else {
+    initializeClient();
     res.json({ message: "Generating QR code..." });
   }
 });
@@ -76,8 +77,8 @@ app.get("/status", (req, res) => {
 dotenv.config({ path: "./config.env" });
 mongoose.set("strictQuery", true);
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.json({ limit: "50mb" }));
 
 const DB = process.env.DATABASE.replace(
   "<password>",
@@ -151,7 +152,7 @@ app.get("/disconnect", async (req, res) => {
   if (client) {
     try {
       await client.logout();
-      await client.destroy();
+      client.destroy();
       client = null;
       app.locals.qrCode = null;
       res.json({ message: "Client disconnected" });
@@ -171,6 +172,62 @@ app.get("/employees/:employeeId", async (req, res) => {
     res.status(200).send(employee);
   } else {
     res.status(404).send("ERROR");
+  }
+});
+
+app.post("/update-employee", async (req, res) => {
+  const { id, employeeName, phoneNumber, cnp, files } = req.body;
+  try {
+    const employee = await Employee.findById(id);
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employee not found" });
+    }
+
+    employee.employeeName = employeeName;
+    employee.phoneNumber = phoneNumber;
+    employee.cnp = cnp;
+
+    // Convert file data to Buffer with checks
+    if (!Array.isArray(files)) {
+      throw new Error("Files should be an array");
+    }
+
+    employee.files = files.map((file, index) => {
+      if (!file || typeof file !== "object") {
+        console.error(`Invalid file at index ${index}:`, file);
+        throw new Error(`Invalid file at index ${index}`);
+      }
+
+      const { contentType, data } = file;
+
+      if (!contentType || !data) {
+        console.error(`Invalid file data at index ${index}:`, file);
+        throw new Error(`Invalid file data at index ${index}`);
+      }
+
+      // Handle the case where data is an object with type 'Buffer'
+      const fileData = Array.isArray(data) ? data : data.data || [];
+
+      if (!Array.isArray(fileData)) {
+        console.error(`Invalid file data at index ${index}:`, file);
+        throw new Error(`Invalid file data at index ${index}`);
+      }
+
+      return {
+        data: Buffer.from(fileData),
+        contentType,
+      };
+    });
+
+    await employee.save();
+    res.json({ success: true, message: "Employee updated successfully" });
+  } catch (error) {
+    console.error("Error updating employee:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error updating employee", error });
   }
 });
 
