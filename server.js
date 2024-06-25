@@ -16,8 +16,13 @@ const app = express();
 app.use(cors());
 
 let client;
+let isClientInitialized = false;
 
 const initializeClient = () => {
+  if (isClientInitialized) {
+    return;
+  }
+
   client = new Client({
     authStrategy: new LocalAuth(),
     webVersionCache: {
@@ -28,12 +33,13 @@ const initializeClient = () => {
   });
 
   client.on("qr", (qr) => {
-    //console.log("QR RECEIVED", qr);
+    console.log("QR RECEIVED", qr);
     app.locals.qrCode = qr;
   });
 
   client.on("ready", () => {
     console.log("Client is ready!");
+    isUserLogged = true;
   });
 
   client.on("authenticated", () => {
@@ -42,21 +48,25 @@ const initializeClient = () => {
 
   client.on("auth_failure", (msg) => {
     console.error("AUTHENTICATION FAILURE", msg);
+    isUserLogged = false;
   });
 
   client.on("disconnected", (reason) => {
     console.log("Client disconnected", reason);
+    isUserLogged = false;
+    isClientInitialized = false;
     client = null;
     initializeClient();
   });
 
   client.initialize();
+  isClientInitialized = true;
 };
 
 initializeClient();
 
 app.get("/connect", (req, res) => {
-  if (client && client.info && client.info.wid) {
+  if (isUserLogged) {
     res.send({ message: "Client already connected" });
   } else if (app.locals.qrCode) {
     res.json({ qr: app.locals.qrCode });
@@ -67,7 +77,7 @@ app.get("/connect", (req, res) => {
 });
 
 app.get("/status", (req, res) => {
-  if (client && client.info && client.info.wid) {
+  if (isUserLogged) {
     res.json({ connected: true });
   } else {
     res.json({ connected: false });
@@ -148,6 +158,7 @@ app.get("/", async (req, res) => {
   const getManager = await Manager.find();
   res.send([getManager, getEmployees]);
 });
+
 app.get("/disconnect", async (req, res) => {
   if (client) {
     try {
