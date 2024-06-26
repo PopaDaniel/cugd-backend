@@ -43,9 +43,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 initializeClient(app);
-app.get("/", (req, res) => {
-  res.json("Hello!");
-});
+
 // Import routes
 const connectRoutes = require("./routes/connectRoutes");
 const statusRoutes = require("./routes/statusRoutes");
