@@ -1,16 +1,18 @@
 const puppeteer = require("puppeteer-core");
-const fs = require("fs");
 const { promisify } = require("util");
-const { chromium } = require("playwright-core");
 
-const downloadBrowser = async () => {
-  const browserFetcher = playwright.chromium.createBrowserFetcher();
-  const revisionInfo = await browserFetcher.download("756035");
+const downloadChromium = async () => {
+  const fetcher = puppeteer.createBrowserFetcher();
+  const revisionInfo = await fetcher.download("756035"); // Replace with desired Chromium revision
 
-  console.log(`Downloaded revision: ${revisionInfo.folderPath}`);
-  const browser = await puppeteer.launch({
-    executablePath: revisionInfo.executablePath,
-  });
+  console.log(`Chromium downloaded to: ${revisionInfo.folderPath}`);
+  console.log(`Executable path: ${revisionInfo.executablePath}`);
+
+  // Optionally, you can save the executable path to an environment variable for later use
+  process.env.CHROMIUM_EXECUTABLE_PATH = revisionInfo.executablePath;
 };
 
-downloadBrowser().catch(console.error);
+downloadChromium().catch((error) => {
+  console.error("Failed to download Chromium:", error);
+  process.exit(1); // Exit with non-zero code to indicate failure
+});
