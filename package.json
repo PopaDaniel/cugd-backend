@@ -4,8 +4,7 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon ./server.js"
+    "start": "node server.js"
   },
   "author": "Daniel",
   "license": "ISC",
@@ -28,6 +27,6 @@
     "nodemon": "^3.0.2"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": "14.x"
   }
 }
