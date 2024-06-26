@@ -1,9 +1,10 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
+const { execSync } = require("child_process");
 
 (async () => {
   try {
-    // Trigger the Puppeteer installation process
-    await puppeteer.launch();
+    // Explicitly download the correct version of Chromium
+    execSync("npx puppeteer-core install chrome");
     console.log("Chromium installation successful");
   } catch (error) {
     console.error("Failed to install Chromium", error);
