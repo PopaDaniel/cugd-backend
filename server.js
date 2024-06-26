@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const multer = require("multer");
 const { Client, LocalAuth } = require("whatsapp-web.js");
-const initializeClient = require("../utils/initializeClient");
+const initializeClient = require("./utils/initializeClient");
 
 dotenv.config({ path: "./.env" });
 
@@ -45,11 +45,11 @@ const upload = multer({ storage: storage });
 initializeClient(app);
 
 // Import routes
-const connectRoutes = require("../routes/connectRoutes");
-const statusRoutes = require("../routes/statusRoutes");
-const employeeRoutes = require("../routes/employeeRoutes");
-const messageRoutes = require("../routes/messageRoutes");
-const authRoutes = require("../routes/authRoutes");
+const connectRoutes = require("./routes/connectRoutes");
+const statusRoutes = require("./routes/statusRoutes");
+const employeeRoutes = require("./routes/employeeRoutes");
+const messageRoutes = require("./routes/messageRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 // Use routes
 app.use(connectRoutes);

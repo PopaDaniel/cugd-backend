@@ -1,2 +1,3 @@
-2024/06/26-23:18:27.803 2378 Creating DB C:\Users\Daniel\Desktop\cu gd - backend\.wwebjs_auth\session\Default\Local Storage\leveldb since it was missing.
-2024/06/26-23:18:27.814 2378 Reusing MANIFEST C:\Users\Daniel\Desktop\cu gd - backend\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2024/06/26-23:30:35.875 8ac Reusing MANIFEST C:\Users\Daniel\Desktop\cu gd - backend\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2024/06/26-23:30:35.876 8ac Recovering log #3
+2024/06/26-23:30:35.877 8ac Reusing old log C:\Users\Daniel\Desktop\cu gd - backend\.wwebjs_auth\session\Default\Local Storage\leveldb/000003.log 

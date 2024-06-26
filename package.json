@@ -4,7 +4,7 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "start": "node ./api/index.js"
+    "start": "node server.js"
   },
   "author": "Daniel",
   "license": "ISC",
@@ -27,6 +27,6 @@
     "nodemon": "^3.0.2"
   },
   "engines": {
-    "node": "20.x"
+    "node": "14.x"
   }
 }
