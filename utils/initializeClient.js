@@ -1,11 +1,8 @@
-const path = require("path");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 
 const initializeClient = (app) => {
-  const authPath = path.join("/tmp", ".wwebjs_auth"); // Use /tmp for the session directory
-
   const client = new Client({
-    authStrategy: new LocalAuth({ dataPath: authPath }),
+    authStrategy: new LocalAuth(),
     webVersionCache: {
       type: "remote",
       remotePath:
