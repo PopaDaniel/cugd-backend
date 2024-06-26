@@ -57,7 +57,9 @@ app.use(statusRoutes);
 app.use(upload.array("files"), employeeRoutes);
 app.use(messageRoutes);
 app.use(authRoutes);
+
 app.get("/", (req, res) => res.json({ message: "Hello World!" }));
+
 app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`);
 });
