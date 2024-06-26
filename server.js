@@ -58,7 +58,14 @@ app.use(upload.array("files"), employeeRoutes);
 app.use(messageRoutes);
 app.use(authRoutes);
 
-app.get("/", (req, res) => res.json({ message: "Hello World!" }));
+app.get("/", (req, res) => {
+  try {
+    res.status(200).json({ message: "Hello, world!" });
+  } catch (error) {
+    console.error("Function error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`);
