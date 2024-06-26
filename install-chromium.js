@@ -1,28 +1,16 @@
-const { exec } = require("child_process");
+const puppeteer = require("puppeteer-core");
+const fs = require("fs");
+const { promisify } = require("util");
+const { chromium } = require("playwright-core");
 
-// Function to execute a command asynchronously
-const executeCommand = (command) => {
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Failed to execute command: ${command}`);
-        console.error(stderr); // Log any error output
-        reject(error);
-      } else {
-        console.log(stdout); // Log standard output
-        resolve();
-      }
-    });
+const downloadBrowser = async () => {
+  const browserFetcher = playwright.chromium.createBrowserFetcher();
+  const revisionInfo = await browserFetcher.download("756035");
+
+  console.log(`Downloaded revision: ${revisionInfo.folderPath}`);
+  const browser = await puppeteer.launch({
+    executablePath: revisionInfo.executablePath,
   });
 };
 
-// Main function to install Chromium using puppeteer-core
-(async () => {
-  try {
-    await executeCommand("npx puppeteer-core install");
-    console.log("Chromium installation successful");
-  } catch (error) {
-    console.error("Failed to install Chromium", error);
-    process.exit(1); // Exit with non-zero code to indicate failure
-  }
-})();
+downloadBrowser().catch(console.error);
