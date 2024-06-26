@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "puppeteer install"
+    "postinstall": "PUPPETEER_SKIP_DOWNLOAD=false npm run install-chromium",
+    "install-chromium": "node install-chromium.js"
   },
   "author": "Daniel",
   "license": "ISC",
