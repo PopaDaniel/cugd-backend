@@ -24,8 +24,10 @@ mongoose.connect(DB).then(() => {
   console.log("DB connected");
 });
 
+// Use environment variable or default path
+const sessionPath = path.join(__dirname, ".vercel", "wwebjs_auth", "session");
+
 // Ensure the session directory exists
-const sessionPath = path.join(__dirname, "wwebjs_auth", "session");
 fs.mkdirSync(sessionPath, { recursive: true });
 
 const storage = multer.diskStorage({
