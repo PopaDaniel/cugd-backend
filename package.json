@@ -20,6 +20,7 @@
     "puppeteer": "^22.12.1",
     "puppeteer-core": "^10.1.0",
     "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "whatsapp-web.js": "^1.23.0"
   },
   "devDependencies": {
