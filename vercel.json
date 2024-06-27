@@ -17,6 +17,5 @@
   ],
   "env": {
     "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
-  },
-  "buildCommand": "npm install && npm run postinstall"
+  }
 }
