@@ -1,10 +1,18 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
+const puppeteer = require("puppeteer");
 
-const initializeClient = (app, sessionPath) => {
+const initializeClient = async (app, sessionPath) => {
+  const browser = await puppeteer.launch({
+    executablePath: puppeteer.executablePath(),
+  });
+
   const client = new Client({
     authStrategy: new LocalAuth({
       dataPath: sessionPath,
     }),
+    puppeteer: {
+      browserWSEndpoint: browser.wsEndpoint(),
+    },
     webVersionCache: {
       type: "remote",
       remotePath:
