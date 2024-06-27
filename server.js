@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const multer = require("multer");
-const { Client, LocalAuth } = require("whatsapp-web.js");
-const initializeClient = require("./utils/initializeClient");
+const path = require("path");
+const fs = require("fs");
 
 dotenv.config({ path: "./.env" });
 
@@ -24,25 +24,25 @@ mongoose.connect(DB).then(() => {
   console.log("DB connected");
 });
 
-app.locals.client = new Client({
-  authStrategy: new LocalAuth(),
-  webVersionCache: {
-    type: "remote",
-    remotePath:
-      "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
-  },
-});
+// Ensure the session directory exists
+const sessionPath = path.join(__dirname, ".vercel", "wwebjs_auth", "session");
+fs.mkdirSync(sessionPath, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads");
+    const uploadPath = path.join(__dirname, "uploads");
+    fs.mkdirSync(uploadPath, { recursive: true });
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 const upload = multer({ storage: storage });
-initializeClient(app);
+
+// Initialize the WhatsApp client
+const initializeClient = require("./utils/initializeClient");
+initializeClient(app, sessionPath);
 
 // Import routes
 const connectRoutes = require("./routes/connectRoutes");
@@ -66,7 +66,8 @@ app.get("/", (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`App listening on port ${process.env.PORT}`);
+  console.log(`App listening on port ${port}`);
 });

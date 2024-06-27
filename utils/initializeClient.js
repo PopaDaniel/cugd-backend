@@ -1,8 +1,10 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
 
-const initializeClient = (app) => {
+const initializeClient = (app, sessionPath) => {
   const client = new Client({
-    authStrategy: new LocalAuth(),
+    authStrategy: new LocalAuth({
+      dataPath: sessionPath,
+    }),
     webVersionCache: {
       type: "remote",
       remotePath:
