@@ -6,7 +6,8 @@ const fs = require("fs");
 const getEmployees = async (req, res) => {
   const getEmployees = await Employee.find();
   const getManager = await Manager.find();
-  res.send([getManager, getEmployees]);
+  res.send(getEmployees);
+  //res.send([getManager, getEmployees]);
 };
 
 const getEmployeeById = async (req, res) => {
