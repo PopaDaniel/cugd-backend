@@ -20,9 +20,14 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
-mongoose.connect(DB).then(() => {
-  console.log("DB connected");
-});
+mongoose
+  .connect(DB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("DB connected");
+  })
+  .catch((err) => {
+    console.error("DB connection error:", err.message);
+  });
 
 // Use /tmp directory for sessions in Vercel
 const sessionPath = path.join("/tmp", "wwebjs_auth", "session");
