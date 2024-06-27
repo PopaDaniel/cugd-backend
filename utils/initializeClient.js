@@ -1,9 +1,17 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
-const puppeteer = require("puppeteer");
+const chrome = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
+const puppeteerExtra = require("puppeteer-extra");
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+
+puppeteerExtra.use(StealthPlugin());
 
 const initializeClient = async (app, sessionPath) => {
-  const browser = await puppeteer.launch({
-    executablePath: puppeteer.executablePath(),
+  const browser = await puppeteerExtra.launch({
+    args: chrome.args,
+    defaultViewport: chrome.defaultViewport,
+    executablePath: await chrome.executablePath,
+    headless: chrome.headless,
   });
 
   const client = new Client({
