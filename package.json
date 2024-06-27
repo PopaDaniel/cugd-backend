@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "puppeteer install"
+    "postinstall": "puppeteer-core install"
   },
   "author": "Daniel",
   "license": "ISC",
