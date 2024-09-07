@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-router.get("/employee", getEmployees);
+router.get("/", getEmployees);
 router.get("/employees/:employeeId", getEmployeeById);
 router.post("/update-employee", updateEmployee);
 router.post("/addNewEmployee", handleAddNewEmployee);

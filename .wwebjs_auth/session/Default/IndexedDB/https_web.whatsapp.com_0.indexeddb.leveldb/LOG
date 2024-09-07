@@ -1,6 +1,4 @@
-2024/06/27-00:18:22.475 2bfc Reusing MANIFEST C:\Users\Daniel\Desktop\cu gd - backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2024/06/27-00:18:22.475 2bfc Recovering log #43
-2024/06/27-00:18:22.477 2bfc Reusing old log C:\Users\Daniel\Desktop\cu gd - backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000043.log 
-2024/06/27-00:18:22.478 2bfc Delete type=2 #42
-2024/06/27-00:18:22.698 47c Manual compaction at level-0 from '\x00\x13\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x14\x00\x00\x00' @ 0 : 0; will stop at (end)
-2024/06/27-00:18:22.698 47c Manual compaction at level-1 from '\x00\x13\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x14\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/09/07-11:12:05.442 2910 Reusing MANIFEST C:\Users\Daniel\Desktop\cu gd - backend dev\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/09/07-11:12:05.442 2910 Recovering log #156
+2024/09/07-11:12:05.456 2910 Reusing old log C:\Users\Daniel\Desktop\cu gd - backend dev\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000156.log 
+2024/09/07-11:12:06.876 1d20 Manual compaction at level-0 from '\x00%\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00&\x00\x00\x00' @ 0 : 0; will stop at (end)

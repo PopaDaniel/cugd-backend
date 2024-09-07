@@ -2,30 +2,32 @@
   "name": "cu-app",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "functions/server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node functions/server.js",
+    "server": "nodemon functions/server.js",
+    "build": "netlify deploy --prod"
   },
   "author": "Daniel",
   "license": "ISC",
   "dependencies": {
-    "chrome-aws-lambda": "^10.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.3.2",
     "multer": "^1.4.5-lts.1",
+    "netlify-cli": "^17.35.0",
+    "netlify-lambda": "^2.0.16",
     "puppeteer": "^22.12.1",
-    "puppeteer-core": "^10.1.0",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-core": "^23.3.0",
+    "serverless-http": "^3.2.0",
     "whatsapp-web.js": "^1.23.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=10.0.0"
   }
 }
