@@ -64,5 +64,5 @@ app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`);
 });
 
-// app.use("/.netlify/functions/app", router);
+app.use("/.netlify/functions/app", router);
 module.exports.handler = serverless(app);
